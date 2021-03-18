@@ -8,3 +8,30 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r initializing}
+devtools::install_github('charlie86/spotifyr')
+```
+
+```{r packages}
+library(tidyverse)
+library(spotifyr)
+library(devtools)
+library(knitr)
+```
+
+```{r authentication}
+Sys.setenv(SPOTIFY_CLIENT_ID = '6d4174afe76a454fbdcf713e66509fcb')
+Sys.setenv(SPOTIFY_CLIENT_SECRET = 'a37db8e2d2bf412ca10fbe7306655f6c')
+
+access_token <- get_spotify_access_token()
+```
+
+```{r testing}
+beatles <- get_artist_audio_features('frank ocean')
+
+beatles %>% 
+  count(key_mode, sort = TRUE) %>% 
+  head(20) %>% 
+  kable()
+```
+
