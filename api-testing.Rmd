@@ -17,6 +17,7 @@ library(tidyverse)
 library(spotifyr)
 library(devtools)
 library(knitr)
+library(ggridges)
 ```
 
 ```{r authentication}
@@ -26,12 +27,31 @@ Sys.setenv(SPOTIFY_CLIENT_SECRET = 'a37db8e2d2bf412ca10fbe7306655f6c')
 access_token <- get_spotify_access_token()
 ```
 
-```{r testing}
-beatles <- get_artist_audio_features('frank ocean')
+```{r creating data}
+my_top = get_my_top_artists_or_tracks(type = 'artists', 
+                                      time_range = 'long_term', limit = 5)
+```
 
-beatles %>% 
-  count(key_mode, sort = TRUE) %>% 
-  head(20) %>% 
-  kable()
+
+```{r testing}
+current <- get_my_currently_playing()
+```
+
+```{r current-song}
+test_current <- current
+df <- data.frame(test_current = unlist(test_current))
+df = df_transpose = t(df)
+#str_interp("Your current song is ${item_name} by ${item_person}", df)
+```
+
+```{r joyplot-frank}
+#frank <- get_artist_audio_features('frank ocean')
+ggplot(frank, aes(x = danceability, y = album_name)) + 
+    geom_joy() + 
+    theme_joy() +
+    ggtitle("Joyplot of Frank Oceann's joy distributions", 
+            subtitle = "Based on 'danceability' pulled 
+            from Spotify's Web API with spotifyr")
+
 ```
 
